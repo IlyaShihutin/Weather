@@ -1,0 +1,35 @@
+.temperature-info-block{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin-top: 30px; 
+}
+.temperature-block{
+    word-spacing: -12px;
+    & p{
+        font-size:100px;
+    }   
+    & span{
+       font-size: 40px;
+       color: rgba(255, 255, 255, 0.4);
+       margin-left: 8px;
+       position: relative;
+       top: -37px;
+   }
+    
+}
+.temperature-icon{
+    font-size: 40px;
+    margin-left: 10px;
+}
+.weather-felt{
+    & img{
+        width: 30px;
+        height: 30px;
+    }
+}
+.cloud-felt{
+    display: flex;
+    flex-direction: column;
+    
+}
