@@ -16,4 +16,9 @@ export const DeleteCity = (newArrayCity, newIndexCity) => ({
 export const ChooseCity = (newIndexCity) => ({
     type: "CHOOSE_CITY",
     newIndexCity
-})    
+})  
+export const AddAllCity = (newData, newIndexCity) => ({
+    type: "ADD_DATA",
+    newData,
+    newIndexCity,
+})

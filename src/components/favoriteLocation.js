@@ -1,5 +1,5 @@
 import React from 'react';
-import basket from "../img/basket.svg"
+import basket from "../img/trash.svg"
 import { DeleteCity, ChooseCity } from "../redux/actions/actionCity"
 
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ class FavoriteLocation extends React.Component {
         this.deleteCity = this.deleteCity.bind(this);
         this.chooseCity = this.chooseCity.bind(this);
     }
+
     deleteCity(deleteIndex) {
         let currentNumber = this.props.info.currentSelectNumberCity;
         let fullArray = this.props.info.cityArray;
@@ -25,12 +26,14 @@ class FavoriteLocation extends React.Component {
         localStorage.setItem('lastCurrentCity', currentNumber)
         this.props.DeleteCity(fullArray, currentNumber);
     }
+
     chooseCity(event, index) {
         if (event.target.localName !== "img") {
             localStorage.setItem('lastCurrentCity', index)
             this.props.ChooseCity(index)
         }
     }
+
     render() {
         let currentConditionData = this.props.info.cityArray
         return (

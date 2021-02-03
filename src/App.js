@@ -7,7 +7,7 @@ import Header from "./components/Header"
 import Weather from "./components/Weather"
 import FavoriteLocation from "./components/favoriteLocation"
 import LoadingWindow from "./components/LoadingWindow"
-import { AddCity, DeleteCity, ChooseCity } from "./redux/actions/actionCity"
+import { AddAllCity } from "./redux/actions/actionCity"
 
 import { connect } from "react-redux";
 const API_KEY = "86ddf541ce3b439e9e6103929213101"
@@ -16,54 +16,80 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      loading:true
     };
-    this.startLoading=this.startLoading.bind(this)
-  }
- startLoading() {
-  this.setState({
-    loading: false,
-})
   }
 
   async checkArrayCity() {
-    if (localStorage.getItem("cityName") == null || localStorage.getItem('lastCurrentCity') == null) {
+    if (localStorage.getItem("cityName") == null) {
       localStorage.setItem('lastCurrentCity', 0)
       await this.getStartCity().then(cityName => localStorage.setItem("cityName", cityName.city));
     }
     const arrayNameCity = localStorage.getItem("cityName").split(",");
-
-  for (let i = 0; i < arrayNameCity.length; i++) {
-      await this.AddDataWeather(arrayNameCity[i], i)
-    }
-    let prevNumberCity = Number(localStorage.getItem('lastCurrentCity'))
-    this.props.ChooseCity(prevNumberCity)
-
+    return arrayNameCity;
   }
 
-  async getStartCity() {
+  getFullDataWeather(arrayNameCity) {
+    const result = [];
+    for (let i = 0; i < arrayNameCity.length; i++) {
+      const city = arrayNameCity[i];
+      const promise = this.getWeather(city).then((details) => ({ ...details }));
+      result.push(promise);
+    }
+    return Promise.all(result);
+  }
+
+  addFullArrayData(array) {
+    this.props.AddAllCity(array, Number(localStorage.getItem('lastCurrentCity')))
+  }
+
+  getStartCity() {
     const url = `https://ipinfo.io/json?token=2fb6a0656d6ab6`;
     return fetch(url)
       .then((res) => res.json())
   }
 
-  async AddDataWeather(city, count) {
-    await this.getWeather(city).then(info => this.props.AddCity(info.data, count))
-  }
-
-  async getWeather(city) {
+  getWeather(city) {
     const url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?q=${city}&num_of_days=1&key=${API_KEY}&format=json`;
     return fetch(url)
-      .then((res) => res.json());
+      .then((res) => res.json())
+      .then((array) => array.data);
+  }
+
+  async checkErrorData(array) {
+    let index1;
+    array = array.filter((item, index) => {
+      if (item.error !== undefined) {
+        index1 = index
+      }
+      return item.error === undefined
+    })
+    if (array.length === 0) {
+      const defaultCity = "Минск"
+      await this.getWeather(defaultCity)
+        .then(newData => array.push(newData))
+      localStorage.setItem('lastCurrentCity', 0)
+      localStorage.setItem("cityName", defaultCity)
+    }
+    else {
+      const allNamyCity = localStorage.getItem("cityName").split(",")
+      const newNameCity = allNamyCity.filter((item, index) => index !== index1)
+      if (localStorage.getItem('lastCurrentCity') === index1) {
+        localStorage.setItem('lastCurrentCity', 0)
+      }
+      localStorage.setItem("cityName", newNameCity)
+    }
+    return array
   }
 
   componentDidMount() {
     this.checkArrayCity()
-    setTimeout(this.startLoading,1000); 
+      .then(arrayNameCity => this.getFullDataWeather(arrayNameCity))
+      .then(array => this.checkErrorData(array))
+      .then((array) => this.addFullArrayData(array))
   }
 
   render() {
-    if (this.props.info.cityArray[0] === undefined ||  this.state.loading) {
+    if (this.props.info.cityArray[0] === undefined || this.state.loading) {
       return (<div className="App">
         <div className="background"></div>
         <LoadingWindow />
@@ -85,4 +111,4 @@ class App extends React.Component {
 }
 export default connect(state => ({
   info: state.cityInfo,
-}), { AddCity, DeleteCity, ChooseCity })(App);
+}), { AddAllCity })(App);

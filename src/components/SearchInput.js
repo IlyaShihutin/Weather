@@ -16,6 +16,7 @@ class SearchInput extends React.Component {
       valueInput: '',
       error: false,
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.searchCity = this.searchCity.bind(this);
   }
@@ -25,19 +26,35 @@ class SearchInput extends React.Component {
     let newArray = this.props.info.cityArray;
     const numberLastIndex = 4;
     if (this.props.info.cityArray.length === 5) {
-      arrayNameCity.pop();
-      arrayNameCity.push(city);
-      localStorage.setItem("cityName", arrayNameCity)
-      localStorage.setItem('lastCurrentCity', numberLastIndex)
       await this.getDataWeather(city).then(info => {
-        this.props.SwitchLastCity(newArray, numberLastIndex)
-        newArray.splice(newArray.length - 1, 1, info.data)
+        if (info.data.error === undefined) {
+          arrayNameCity.pop();
+          arrayNameCity.push(city);
+          newArray.splice(newArray.length - 1, 1, info.data)
+          this.props.SwitchLastCity(newArray, numberLastIndex)
+          localStorage.setItem("cityName", arrayNameCity)
+          localStorage.setItem('lastCurrentCity', numberLastIndex)
+        }
+        else {
+          this.setState({
+            error: true,
+          })
+        }
       })
     } else {
-      arrayNameCity.push(city)
-      localStorage.setItem("cityName", arrayNameCity)
-      localStorage.setItem('lastCurrentCity', newArray.length)
-      await this.getDataWeather(city).then(info => this.props.AddCity(info.data, newArray.length))
+      await this.getDataWeather(city).then(info => {
+        if (info.data.error === undefined) {
+
+          arrayNameCity.push(city)
+          this.props.AddCity(info.data, newArray.length)
+          localStorage.setItem("cityName", arrayNameCity)
+          localStorage.setItem('lastCurrentCity', newArray.length)
+        } else {
+          this.setState({
+            error: true,
+          })
+        }
+      })
     }
   }
 
@@ -48,12 +65,15 @@ class SearchInput extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ valueInput: event.target.value });
-    event.preventDefault();
+    this.setState({
+      valueInput: event.target.value,
+      error: false
+    });
   }
   searchCity(event) {
-    this.addNewCity(this.state.valueInput);
-    event.preventDefault();
+    if (event.charCode === 13 || event.target.localName === "img") {
+      this.addNewCity(this.state.valueInput);
+    }
   }
 
   render() {
@@ -68,18 +88,18 @@ class SearchInput extends React.Component {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Поиск города"
+                label={this.state.error ? "Нет информации по этому городу" : "Поиск города"}
                 margin="normal"
                 InputProps={{ ...params.InputProps, type: 'search' }}
                 onSelect={this.handleChange}
+                onKeyPress={event => this.searchCity(event)}
               />
             )}
           />
         </div>
         <div className="search-btn">
-          <img alt="текст" src={location_pointer} onClick={this.searchCity}></img>
+          <img alt="текст" src={location_pointer} onClick={event => this.searchCity(event)}></img>
         </div>
-
       </div>
     );
   }

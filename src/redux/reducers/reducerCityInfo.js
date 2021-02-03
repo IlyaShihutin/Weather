@@ -1,6 +1,6 @@
 let initialState = {
   cityArray: [],
-  currentSelectNumberCity: -1,
+  currentSelectNumberCity: 0,
 };
 export default function cityInfo(state = initialState, action) {
 
@@ -10,6 +10,14 @@ export default function cityInfo(state = initialState, action) {
         return {
           ...state,
           cityArray: [...state.cityArray, action.newArray],
+          currentSelectNumberCity: action.newIndexCity,
+        }
+      }
+      case "ADD_DATA":
+      {
+        return {
+          ...state,
+          cityArray:  action.newData,
           currentSelectNumberCity: action.newIndexCity,
         }
       }
