@@ -9,11 +9,11 @@ class Temperature extends React.Component {
         };
     }
     render() {
-        let currentSelectNumberCity = this.props.info.currentSelectNumberCity;
-        let currentConditionData = this.props.info.cityArray[currentSelectNumberCity].current_condition[0];
-        let currentTemperatureC = currentConditionData.temp_C;
-        let currentTemperatureF = currentConditionData.temp_F;
-        let currentweatherIconUrl = currentConditionData.weatherDesc[0].value;
+        const currentSelectNumberCity = this.props.info.currentSelectNumberCity;
+        const currentConditionData = this.props.info.cityArray[currentSelectNumberCity].current_condition[0];
+        const currentTemperatureC = currentConditionData.temp_C;
+        const currentTemperatureF = currentConditionData.temp_F;
+        const currentweatherIconUrl = currentConditionData.weatherDesc[0].value;
         return (
             <section className="temperature">
                 <div className="temperature-info-block">

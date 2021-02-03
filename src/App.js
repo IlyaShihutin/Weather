@@ -2,15 +2,15 @@
 import React from 'react';
 import './css/app.css';
 
-import Temperature from "./components/Temperature"
-import Header from "./components/Header"
-import Weather from "./components/Weather"
-import FavoriteLocation from "./components/favoriteLocation"
-import LoadingWindow from "./components/LoadingWindow"
-import { AddAllCity } from "./redux/actions/actionCity"
+import Temperature from "./components/Temperature";
+import Header from "./components/Header";
+import Weather from "./components/Weather";
+import FavoriteLocation from "./components/FavoriteLocation";
+import LoadingWindow from "./components/LoadingWindow";
+import { addAllCity } from "./redux/actions/actionCity";
 
 import { connect } from "react-redux";
-const API_KEY = "86ddf541ce3b439e9e6103929213101"
+const API_KEY = "86ddf541ce3b439e9e6103929213101";
 
 class App extends React.Component {
   constructor() {
@@ -21,7 +21,7 @@ class App extends React.Component {
 
   async checkArrayCity() {
     if (localStorage.getItem("cityName") == null) {
-      localStorage.setItem('lastCurrentCity', 0)
+      localStorage.setItem('lastCurrentCity', 0);
       await this.getStartCity().then(cityName => localStorage.setItem("cityName", cityName.city));
     }
     const arrayNameCity = localStorage.getItem("cityName").split(",");
@@ -39,13 +39,13 @@ class App extends React.Component {
   }
 
   addFullArrayData(array) {
-    this.props.AddAllCity(array, Number(localStorage.getItem('lastCurrentCity')))
+    this.props.addAllCity(array, Number(localStorage.getItem('lastCurrentCity')));
   }
 
   getStartCity() {
     const url = `https://ipinfo.io/json?token=2fb6a0656d6ab6`;
     return fetch(url)
-      .then((res) => res.json())
+      .then((res) => res.json());
   }
 
   getWeather(city) {
@@ -59,24 +59,24 @@ class App extends React.Component {
     let index1;
     array = array.filter((item, index) => {
       if (item.error !== undefined) {
-        index1 = index
+        index1 = index;
       }
-      return item.error === undefined
+      return item.error === undefined;
     })
     if (array.length === 0) {
-      const defaultCity = "Минск"
+      const defaultCity = "Минск";
       await this.getWeather(defaultCity)
-        .then(newData => array.push(newData))
-      localStorage.setItem('lastCurrentCity', 0)
-      localStorage.setItem("cityName", defaultCity)
+        .then(newData => array.push(newData));
+      localStorage.setItem('lastCurrentCity', 0);
+      localStorage.setItem("cityName", defaultCity);
     }
     else {
-      const allNamyCity = localStorage.getItem("cityName").split(",")
-      const newNameCity = allNamyCity.filter((item, index) => index !== index1)
+      const allNamyCity = localStorage.getItem("cityName").split(",");
+      const newNameCity = allNamyCity.filter((item, index) => index !== index1);
       if (localStorage.getItem('lastCurrentCity') === index1) {
-        localStorage.setItem('lastCurrentCity', 0)
+        localStorage.setItem('lastCurrentCity', 0);
       }
-      localStorage.setItem("cityName", newNameCity)
+      localStorage.setItem("cityName", newNameCity);
     }
     return array
   }
@@ -85,7 +85,7 @@ class App extends React.Component {
     this.checkArrayCity()
       .then(arrayNameCity => this.getFullDataWeather(arrayNameCity))
       .then(array => this.checkErrorData(array))
-      .then((array) => this.addFullArrayData(array))
+      .then((array) => this.addFullArrayData(array));
   }
 
   render() {
@@ -111,4 +111,4 @@ class App extends React.Component {
 }
 export default connect(state => ({
   info: state.cityInfo,
-}), { AddAllCity })(App);
+}), { addAllCity })(App);

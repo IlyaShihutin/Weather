@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import SearchInput from "./SearchInput"
+import SearchInput from "./SearchInput";
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -8,23 +8,24 @@ class Header extends React.Component {
             time: "",
         };
     }
-    setData() {
-        var today = new Date();
-        var time = new Date().toLocaleTimeString().slice(0, -3);
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
+    addTime() {
+        let today = new Date();
+        const time = new Date().toLocaleTimeString().slice(0, -3);
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
         today = dd + '.' + mm + '.' + yyyy + " " + time;
         this.setState({
             time: today,
         })
     }
     componentDidMount() {
-        this.setData()
+        this.addTime()
     }
     render() {
-        let currentSelectNumberCity = this.props.info.currentSelectNumberCity;
-        let currentCity = this.props.info.cityArray[currentSelectNumberCity].request[0].query;
+        const currentSelectNumberCity = this.props.info.currentSelectNumberCity;
+        const currentCity = this.props.info.cityArray[currentSelectNumberCity].request[0].query;
+
         return (
             <section className="header">
                 <div className="header-block">

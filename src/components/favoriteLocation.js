@@ -1,13 +1,12 @@
 import React from 'react';
 import basket from "../img/trash.svg"
-import { DeleteCity, ChooseCity } from "../redux/actions/actionCity"
+import { deleteCurCity, chooseSelectCity } from "../redux/actions/actionCity"
 
 import { connect } from "react-redux";
 class FavoriteLocation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            delIndexCursor: '',
         };
         this.deleteCity = this.deleteCity.bind(this);
         this.chooseCity = this.chooseCity.bind(this);
@@ -16,26 +15,27 @@ class FavoriteLocation extends React.Component {
     deleteCity(deleteIndex) {
         let currentNumber = this.props.info.currentSelectNumberCity;
         let fullArray = this.props.info.cityArray;
-        fullArray = fullArray.filter((item, index) => index !== deleteIndex)
+        fullArray = fullArray.filter((item, index) => index !== deleteIndex);
         if (currentNumber === (this.props.info.cityArray.length - 1) || deleteIndex < currentNumber) {
             currentNumber -= 1;
         }
         let arrayNameCity = localStorage.getItem("cityName").split(",");
         arrayNameCity = arrayNameCity.filter((item, index) => index !== deleteIndex);
-        localStorage.setItem("cityName", arrayNameCity)
-        localStorage.setItem('lastCurrentCity', currentNumber)
-        this.props.DeleteCity(fullArray, currentNumber);
+        localStorage.setItem("cityName", arrayNameCity);
+        localStorage.setItem('lastCurrentCity', currentNumber);
+        this.props.deleteCurCity(fullArray, currentNumber);
     }
 
     chooseCity(event, index) {
         if (event.target.localName !== "img") {
-            localStorage.setItem('lastCurrentCity', index)
-            this.props.ChooseCity(index)
+            localStorage.setItem('lastCurrentCity', index);
+            this.props.chooseSelectCity(index);
         }
     }
 
     render() {
-        let currentConditionData = this.props.info.cityArray
+        const currentConditionData = this.props.info.cityArray;
+
         return (
             <div className="favorite-location">
                 <div className="city-block">
@@ -60,4 +60,4 @@ class FavoriteLocation extends React.Component {
 }
 export default connect(state => ({
     info: state.cityInfo,
-}), { DeleteCity, ChooseCity })(FavoriteLocation);
+}), { deleteCurCity, chooseSelectCity })(FavoriteLocation);

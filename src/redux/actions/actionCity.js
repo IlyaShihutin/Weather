@@ -1,23 +1,23 @@
-export const AddCity = (newArray, newIndexCity) => ({
+export const addCity = (newArray, newIndexCity) => ({
     type: "ADD_CITY",
     newArray,
     newIndexCity,
 })
-export const SwitchLastCity = (newArray,newIndexCity) => ({
+export const switchLastCity = (newArray,newIndexCity) => ({
     type: "SWITCH_CITY",
     newArray,
     newIndexCity,
 })
-export const DeleteCity = (newArrayCity, newIndexCity) => ({
+export const deleteCurCity = (newArrayCity, newIndexCity) => ({
     type: "DELETE_CITY",
     newArrayCity,
     newIndexCity,
 })
-export const ChooseCity = (newIndexCity) => ({
+export const chooseSelectCity = (newIndexCity) => ({
     type: "CHOOSE_CITY",
     newIndexCity
 })  
-export const AddAllCity = (newData, newIndexCity) => ({
+export const addAllCity = (newData, newIndexCity) => ({
     type: "ADD_DATA",
     newData,
     newIndexCity,

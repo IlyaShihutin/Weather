@@ -1,8 +1,8 @@
 import React from 'react';
-import humidity from '../img/humidity.svg'
-import pressure from '../img/pressure_white_fill.svg'
-import wind_white from '../img/wind_white.svg'
-import feels_like from '../img/feels_like_white.svg'
+import humidity from '../img/humidity.svg';
+import pressure from '../img/pressure_white_fill.svg';
+import wind_white from '../img/wind_white.svg';
+import feels_like from '../img/feels_like_white.svg';
 import { connect } from "react-redux";
 
 class Weather extends React.Component {
@@ -14,12 +14,12 @@ class Weather extends React.Component {
     }
 
     render() {
-        let currentSelectNumberCity = this.props.info.currentSelectNumberCity;
-        let currentConditionData = this.props.info.cityArray[currentSelectNumberCity].current_condition[0];
-        let currentWind = Math.round(currentConditionData.windspeedKmph / 3);
-        let currentHumidity = currentConditionData.humidity;
-        let currentPressure = currentConditionData.pressure;
-        let currentFeelsLikeC = currentConditionData.FeelsLikeC;
+        const currentSelectNumberCity = this.props.info.currentSelectNumberCity;
+        const currentConditionData = this.props.info.cityArray[currentSelectNumberCity].current_condition[0];
+        const currentWind = Math.round(currentConditionData.windspeedKmph / 3);
+        const currentHumidity = currentConditionData.humidity;
+        const currentPressure = currentConditionData.pressure;
+        const currentFeelsLikeC = currentConditionData.FeelsLikeC;
         return (
             <section className="weather">
                 <div className="weather-info">

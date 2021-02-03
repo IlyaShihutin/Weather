@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { AddCity, SwitchLastCity } from "../redux/actions/actionCity"
-import location_pointer from "../img/location-pointer.svg"
+import { addCity, switchLastCity } from "../redux/actions/actionCity";
+import location_pointer from "../img/location-pointer.svg";
 import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -27,34 +27,33 @@ class SearchInput extends React.Component {
     const numberLastIndex = 4;
     if (this.props.info.cityArray.length === 5) {
       await this.getDataWeather(city).then(info => {
-        if (info.data.error === undefined) {
+        if (!info.data.error) {
           arrayNameCity.pop();
           arrayNameCity.push(city);
-          newArray.splice(newArray.length - 1, 1, info.data)
-          this.props.SwitchLastCity(newArray, numberLastIndex)
-          localStorage.setItem("cityName", arrayNameCity)
-          localStorage.setItem('lastCurrentCity', numberLastIndex)
+          newArray.splice(newArray.length - 1, 1, info.data);
+          this.props.switchLastCity(newArray, numberLastIndex);
+          localStorage.setItem("cityName", arrayNameCity);
+          localStorage.setItem('lastCurrentCity', numberLastIndex);
         }
         else {
           this.setState({
             error: true,
-          })
+          });
         }
-      })
+      });
     } else {
       await this.getDataWeather(city).then(info => {
-        if (info.data.error === undefined) {
-
-          arrayNameCity.push(city)
-          this.props.AddCity(info.data, newArray.length)
-          localStorage.setItem("cityName", arrayNameCity)
-          localStorage.setItem('lastCurrentCity', newArray.length)
+        if (!info.data.error) {
+          arrayNameCity.push(city);
+          this.props.addCity(info.data, newArray.length);
+          localStorage.setItem("cityName", arrayNameCity);
+          localStorage.setItem('lastCurrentCity', newArray.length);
         } else {
           this.setState({
             error: true,
-          })
+          });
         }
-      })
+      });
     }
   }
 
@@ -107,5 +106,5 @@ class SearchInput extends React.Component {
 
 export default connect(state => ({
   info: state.cityInfo,
-}), { AddCity, SwitchLastCity })(SearchInput);
+}), { addCity,switchLastCity })(SearchInput);
 
