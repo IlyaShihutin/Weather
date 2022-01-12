@@ -1,0 +1,34 @@
+.city-block{
+    display: flex;
+    justify-content:center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+.city-panel{
+    width: 200px;
+    height: 100px;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    background: rgba(0,0,0,.3);
+    &:hover{
+    cursor: pointer;
+    background: rgba(0,0,0,.1);
+    }
+    & img{
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.city-btn-del{
+    width: 60px;
+    height: 40px;
+}
+.city-name{
+    margin: 10px;
+}
